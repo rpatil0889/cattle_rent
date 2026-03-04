@@ -1,0 +1,54 @@
+server:
+  port: 8080
+  shutdown: graceful
+  servlet:
+    context-path: /
+
+spring:
+  application:
+    name: api-gateway
+
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
+
+  cloud:
+    gateway:
+      mvc:
+        routes:
+
+          - id: user-service
+            uri: lb://user-service
+            predicates:
+              - Path=/users/**
+            filters:
+              - StripPrefix=1
+
+          - id: order-service
+            uri: lb://order-service
+            predicates:
+              - Path=/orders/**
+            filters:
+              - StripPrefix=1
+
+        default-filters:
+          - DedupeResponseHeader=Access-Control-Allow-Origin
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://admin:Admin123@localhost:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when_authorized
+
+logging:
+  level:
+    org.springframework.cloud.gateway: INFO
