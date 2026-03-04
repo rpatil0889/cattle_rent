@@ -14,11 +14,11 @@ spring:
   security:
     user:
       name: ${EUREKA_USERNAME:admin}
-      password: ${EUREKA_PASSWORD:Admin@123}
+      password: ${EUREKA_PASSWORD:Admin123}
 
 eureka:
   instance:
-    hostname: ${EUREKA_HOSTNAME:cattlerent.com}
+    hostname: ${EUREKA_HOSTNAME:localhost}
     prefer-ip-address: false
     instance-id: ${spring.application.name}:${server.port}
 
