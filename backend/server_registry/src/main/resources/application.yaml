@@ -1,0 +1,52 @@
+server:
+  port: 8761
+  shutdown: graceful
+  http2:
+    enabled: true
+
+spring:
+  application:
+    name: eureka-server
+
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
+
+  security:
+    user:
+      name: ${EUREKA_USERNAME:admin}
+      password: ${EUREKA_PASSWORD:Admin@123}
+
+eureka:
+  instance:
+    hostname: ${EUREKA_HOSTNAME:cattlerent.com}
+    prefer-ip-address: false
+    instance-id: ${spring.application.name}:${server.port}
+
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+
+  server:
+    enable-self-preservation: true
+    eviction-interval-timer-in-ms: 60000
+    renewal-percent-threshold: 0.85
+    response-cache-update-interval-ms: 30000
+    response-cache-auto-expiration-in-seconds: 180
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  endpoint:
+    health:
+      show-details: when_authorized
+  metrics:
+    tags:
+      application: ${spring.application.name}
+
+logging:
+  level:
+    root: INFO
+    com.netflix.eureka: INFO
+    com.netflix.discovery: INFO
